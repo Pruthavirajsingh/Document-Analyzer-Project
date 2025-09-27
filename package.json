@@ -1,10 +1,15 @@
 {
-  "name": "legality-backend",
+  "name": "document-analyzer",
   "version": "1.0.0",
-  "description": "Backend for Legality AI Analyzer",
+  "description": "AI-powered legal document analyzer using Google Gemini",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'No build step required'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@google/generative-ai": "^0.8.0",

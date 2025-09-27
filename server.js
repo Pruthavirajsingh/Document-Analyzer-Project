@@ -22,8 +22,8 @@ const path = require('path');
 // Create an Express application instance
 const app = express();
 
-// Define the port number where server will listen for requests
-const port = 3000;
+// Define the port number where server will listen for requests (use environment port or default to 3000)
+const port = process.env.PORT || 3000;
 
 // ========== MIDDLEWARE CONFIGURATION ==========
 // Enable Cross-Origin Resource Sharing (allows frontend to communicate with backend)

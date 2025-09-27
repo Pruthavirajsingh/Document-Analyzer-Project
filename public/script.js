@@ -186,8 +186,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ========== SEND REQUEST TO SERVER ==========
         try {
+            // Determine the correct API URL (use current origin in production, localhost in development)
+            const apiUrl = window.location.hostname === 'localhost' 
+                ? 'http://localhost:3000/analyze' 
+                : '/analyze';
+            
             // Send POST request to analysis endpoint with form data
-            const response = await fetch('http://localhost:3000/analyze', {
+            const response = await fetch(apiUrl, {
                 method: 'POST', // Use POST method to send data
                 body: formData, // Send the FormData containing text/file
             });

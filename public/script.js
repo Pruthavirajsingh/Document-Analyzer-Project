@@ -186,10 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ========== SEND REQUEST TO SERVER ==========
         try {
-            // Determine the correct API URL (use current origin in production, localhost in development)
+            // Determine the correct API URL (use serverless function in production, localhost in development)
             const apiUrl = window.location.hostname === 'localhost' 
                 ? 'http://localhost:3000/analyze' 
-                : '/analyze';
+                : '/api/analyze';
             
             // Send POST request to analysis endpoint with form data
             const response = await fetch(apiUrl, {

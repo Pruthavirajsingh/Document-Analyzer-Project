@@ -1,121 +1,155 @@
-/* --- Global Styles & Dark Mode Theme --- */
+/* ========== CSS CUSTOM PROPERTIES (VARIABLES) ========== */
+/* Define reusable color scheme and styling variables for consistent theming */
 :root {
+    /* Primary accent color used for buttons, links, and highlights */
     --primary-accent: #4a90e2; /* Bright blue for key elements */
-    --background-dark: #0D1117;
-    --surface-dark: #161B22;
-    --border-dark: #30363d;
-    --text-primary-dark: #c9d1d9;
-    --text-secondary-dark: #8b949e;
-    --font-family: 'Inter', sans-serif;
+    
+    /* Dark theme color palette */
+    --background-dark: #0D1117;    /* Main page background color */
+    --surface-dark: #161B22;       /* Card and panel background color */
+    --border-dark: #30363d;        /* Border color for elements */
+    --text-primary-dark: #c9d1d9;  /* Primary text color (high contrast) */
+    --text-secondary-dark: #8b949e; /* Secondary text color (lower contrast) */
+    
+    /* Typography */
+    --font-family: 'Inter', sans-serif; /* Google Fonts - modern, clean font */
 }
 
+/* ========== GLOBAL BODY STYLES ========== */
+/* Base styles applied to the entire page */
 body {
-    font-family: var(--font-family);
-    margin: 0;
-    background-color: var(--background-dark);
-    color: var(--text-primary-dark);
-    line-height: 1.6;
+    font-family: var(--font-family);        /* Apply Inter font to all text */
+    margin: 0;                              /* Remove default browser margin */
+    background-color: var(--background-dark); /* Set dark background */
+    color: var(--text-primary-dark);        /* Set default text color */
+    line-height: 1.6;                       /* Improve text readability with line spacing */
 }
 
-/* --- Animated Background Glow --- */
+/* ========== ANIMATED BACKGROUND GLOW ========== */
+/* Creates a subtle animated glow effect behind the content for visual appeal */
 .background-glow {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 1200px;
-    height: 1200px;
+    position: fixed;                /* Fixed positioning relative to viewport */
+    top: 50%;                       /* Position vertically in center */
+    left: 50%;                      /* Position horizontally in center */
+    width: 1200px;                  /* Large size to cover most of the viewport */
+    height: 1200px;                 /* Square dimensions for circular gradient */
+    /* Radial gradient creating blue glow effect that fades to transparent */
     background: radial-gradient(circle, rgba(74, 144, 226, 0.15) 0%, rgba(74, 144, 226, 0) 60%);
-    transform: translate(-50%, -50%);
-    animation: pulse 10s infinite alternate;
-    z-index: -1;
+    transform: translate(-50%, -50%); /* Center the element using transform */
+    animation: pulse 10s infinite alternate; /* Apply pulse animation */
+    z-index: -1;                    /* Place behind all other content */
 }
 
+/* Animation keyframes for the pulsing glow effect */
 @keyframes pulse {
+    /* Starting state: smaller size, lower opacity */
     0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+    /* Ending state: larger size, full opacity */
     100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
 }
 
-/* --- Header & Navigation --- */
+/* ========== HEADER & NAVIGATION STYLES ========== */
+/* Sticky header with glassmorphism effect */
 header {
-    background-color: rgba(13, 17, 23, 0.8);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-dark);
-    padding: 1rem 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    background-color: rgba(13, 17, 23, 0.8); /* Semi-transparent dark background */
+    backdrop-filter: blur(10px);             /* Glassmorphism blur effect */
+    border-bottom: 1px solid var(--border-dark); /* Subtle bottom border */
+    padding: 1rem 2rem;                      /* Vertical and horizontal padding */
+    position: sticky;                        /* Stick to top when scrolling */
+    top: 0;                                  /* Position at top of viewport */
+    z-index: 1000;                          /* Ensure header stays above other content */
 }
 
+/* Navigation container with flexbox layout */
 nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1400px;
-    margin: 0 auto;
+    display: flex;                          /* Use flexbox for layout */
+    justify-content: space-between;         /* Space between logo and nav links */
+    align-items: center;                    /* Vertically center items */
+    max-width: 1400px;                      /* Constrain maximum width */
+    margin: 0 auto;                         /* Center the navigation horizontally */
 }
 
+/* Logo/brand styling */
 .logo {
-    font-weight: 700;
-    font-size: 1.75rem;
-    text-decoration: none;
-    color: var(--text-primary-dark);
+    font-weight: 700;                       /* Bold font weight */
+    font-size: 1.75rem;                     /* Large font size for prominence */
+    text-decoration: none;                  /* Remove underline from link */
+    color: var(--text-primary-dark);        /* Use primary text color */
 }
 
+/* Container for navigation buttons */
 .nav-links {
-    display: flex;
-    gap: 1rem;
+    display: flex;                          /* Horizontal layout for buttons */
+    gap: 1rem;                             /* Space between navigation buttons */
 }
 
+/* Base styles for navigation buttons */
 .nav-button {
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    color: var(--text-primary-dark);
-    transition: all 0.2s ease-in-out;
+    padding: 0.6rem 1.2rem;                /* Internal padding for button */
+    border-radius: 8px;                     /* Rounded corners */
+    text-decoration: none;                  /* Remove underline */
+    font-weight: 500;                       /* Medium font weight */
+    color: var(--text-primary-dark);        /* Default text color */
+    transition: all 0.2s ease-in-out;      /* Smooth transition for hover effects */
+    border: none;                           /* Remove default button border */
+    background: none;                       /* Remove default button background */
+    cursor: pointer;                        /* Show pointer cursor on hover */
 }
+
+/* Hover effect for navigation buttons */
 .nav-button:hover {
-    background-color: var(--surface-dark);
+    background-color: var(--surface-dark);  /* Background color on hover */
 }
+
+/* Primary navigation button (Share button) styling */
 .nav-button.primary {
-    background-color: var(--primary-accent);
-    color: #fff;
+    background-color: var(--primary-accent); /* Accent color background */
+    color: #fff;                            /* White text for contrast */
 }
+
+/* Primary button hover effect */
 .nav-button.primary:hover {
-    background-color: #357ABD;
+    background-color: #357ABD;              /* Darker blue on hover */
 }
 
-/* --- Main Analyzer Section --- */
+/* ========== MAIN ANALYZER SECTION ========== */
+/* Main content container with centered layout */
 .analyzer-main {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 3rem 2rem;
+    max-width: 1400px;                      /* Constrain maximum width for readability */
+    margin: 0 auto;                         /* Center the content horizontally */
+    padding: 3rem 2rem;                     /* Large top/bottom padding, smaller sides */
 }
 
+/* Hero section with main heading and description */
 .analyzer-header {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-.analyzer-header h1 {
-    font-size: 3.5rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-}
-.analyzer-header p {
-    color: var(--text-secondary-dark);
-    font-size: 1.2rem;
-    max-width: 700px;
-    margin: 0 auto;
+    text-align: center;                     /* Center-align all header content */
+    margin-bottom: 3rem;                    /* Space between header and main tool */
 }
 
+/* Main page heading styles */
+.analyzer-header h1 {
+    font-size: 3.5rem;                      /* Large, prominent heading size */
+    font-weight: 800;                       /* Extra bold font weight */
+    margin-bottom: 1rem;                    /* Space below heading */
+}
+
+/* Subheading/description text */
+.analyzer-header p {
+    color: var(--text-secondary-dark);      /* Lighter text color for description */
+    font-size: 1.2rem;                      /* Slightly larger than body text */
+    max-width: 700px;                       /* Limit width for better readability */
+    margin: 0 auto;                         /* Center the paragraph */
+}
+
+/* Main analyzer tool container with grid layout */
 .analyzer-tool {
-    display: grid;
-    grid-template-columns: 1fr 1.1fr; /* Give slightly more space to the output */
-    gap: 3rem;
-    background-color: var(--surface-dark);
-    border: 1px solid var(--border-dark);
-    border-radius: 16px;
-    padding: 2rem;
+    display: grid;                          /* Use CSS Grid for layout */
+    grid-template-columns: 1fr 1.1fr;      /* Two columns: input (1fr), output (1.1fr - slightly wider) */
+    gap: 3rem;                             /* Space between input and output panels */
+    background-color: var(--surface-dark);  /* Dark surface color for the card */
+    border: 1px solid var(--border-dark);   /* Subtle border around the tool */
+    border-radius: 16px;                    /* Rounded corners for modern look */
+    padding: 2rem;                          /* Internal padding */
 }
 
 /* --- Input Panel --- */
@@ -278,12 +312,37 @@ nav {
 }
 
 /* --- Footer --- */
+/* ========== FOOTER STYLES ========== */
+/* Simple centered footer with author credits */
 footer {
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.9rem;
-    color: var(--text-secondary-dark);
-    border-top: 1px solid var(--border-dark);
-    margin-top: 4rem;
+    text-align: center;                     /* Center-align footer text */
+    padding: 2rem;                          /* Padding around footer content */
+    font-size: 0.9rem;                      /* Slightly smaller text */
+    color: var(--text-secondary-dark);      /* Secondary text color */
+    border-top: 1px solid var(--border-dark); /* Border line above footer */
+    margin-top: 4rem;                       /* Space above footer */
 }
+
+/* ========== CSS FILE STRUCTURE SUMMARY ========== */
+/*
+ * This CSS file is organized into the following sections:
+ * 
+ * 1. CSS Custom Properties (Variables) - Color scheme and typography
+ * 2. Global Body Styles - Base page styling
+ * 3. Animated Background Glow - Visual effects
+ * 4. Header & Navigation - Top navigation bar styling
+ * 5. Main Analyzer Section - Hero section and main layout
+ * 6. Input Panel - Text area and file upload styling
+ * 7. Output Panel - Results display styling
+ * 8. Loading Spinner - Animation for processing state
+ * 9. Footer - Bottom page credits
+ * 
+ * Design Philosophy:
+ * - Dark theme for professional appearance
+ * - Modern glassmorphism effects
+ * - Consistent spacing using rem units
+ * - Accessible color contrast ratios
+ * - Responsive design principles
+ * - Smooth animations and transitions
+ */
 

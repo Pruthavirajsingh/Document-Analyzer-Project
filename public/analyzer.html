@@ -1,65 +1,107 @@
+<!-- Document type declaration for HTML5 -->
 <!DOCTYPE html>
+<!-- HTML root element with language attribute for accessibility -->
 <html lang="en">
 <head>
+    <!-- Character encoding declaration for proper text display -->
     <meta charset="UTF-8">
+    <!-- Viewport meta tag for responsive design on mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page title displayed in browser tab -->
     <title>AI Document Analysis</title>
+    <!-- Google Fonts link for Inter font family with various weights -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Link to external CSS stylesheet for page styling -->
     <link rel="stylesheet" href="style.css">
 </head>
+<!-- Main body element contains all visible page content -->
 <body>
 
+    <!-- Animated background glow effect for visual appeal -->
     <div class="background-glow"></div>
 
+    <!-- Header section containing navigation bar -->
     <header>
+        <!-- Navigation container with logo and action buttons -->
         <nav>
+            <!-- Logo/brand name linking to home page -->
             <a href="/" class="logo">Document Analyzer</a>
+            <!-- Container for navigation buttons -->
             <div class="nav-links">
+                <!-- Login button (placeholder link) -->
                 <a href="#" class="nav-button">Log In</a>
+                <!-- Share button with JavaScript functionality to copy URL -->
                 <button id="share-btn" class="nav-button primary">Share</button>
             </div>
         </nav>
     </header>
 
+    <!-- Main content area for the document analyzer tool -->
     <main class="analyzer-main">
+        <!-- Hero section with main heading and description -->
         <div class="analyzer-header">
+            <!-- Main page heading -->
             <h1>Clarity in Every Clause.</h1>
+            <!-- Descriptive text explaining the tool's functionality -->
             <p>Paste your text or upload a document. Our AI provides instant, easy-to-understand analysis.</p>
         </div>
 
+        <!-- Main analyzer interface with input and output panels -->
         <div class="analyzer-tool">
+            <!-- Left panel for document input (text or file upload) -->
             <div class="input-panel">
+                <!-- Tab buttons to switch between text input and file upload -->
                 <div class="input-tabs">
+                    <!-- Text input tab (active by default) -->
                     <button class="tab-btn active" data-tab="text-input">Text Input</button>
+                    <!-- File upload tab -->
                     <button class="tab-btn" data-tab="pdf-upload">Upload File</button>
                 </div>
+                <!-- Container for input elements (text area or file upload) -->
                 <div class="input-container">
+                    <!-- Text area for direct text input (visible by default) -->
                     <textarea id="text-area" placeholder="Paste your contract clause, service agreement, or any legal text here..."></textarea>
+                    <!-- File upload area (hidden by default, shown when Upload File tab is selected) -->
                     <div id="file-upload-placeholder" style="display: none;">
+                        <!-- SVG icon for upload visual -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <!-- Upload arrow icon path -->
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l-3.75 3.75M12 9.75l3.75 3.75M3 14.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18v-3.75" />
                         </svg>
+                        <!-- Upload instruction text -->
                         <p><span>Click to upload</span> or drag and drop</p>
+                        <!-- Supported file formats indication -->
                         <small>PDF, PNG, JPG supported</small>
+                        <!-- Hidden file input element (triggered by clicking the placeholder) -->
                         <input type="file" id="file-input" accept=".pdf,image/*" style="display: none;">
                     </div>
                 </div>
+                <!-- Primary action button to trigger document analysis -->
                 <button id="analyze-btn" class="button-primary">Analyze Document</button>
             </div>
             
+            <!-- Right panel for displaying analysis results -->
             <div class="output-panel">
+                <!-- Loading spinner (hidden by default, shown during analysis) -->
                 <div id="loading-spinner" style="display: none;"></div>
+                <!-- Container for all analysis results -->
                 <div id="analysis-results">
+                    <!-- Document summary section -->
                     <div id="summary">
                         <h3>Summary</h3>
+                        <!-- Placeholder text, replaced with actual summary after analysis -->
                         <p class="placeholder">Your document summary will appear here.</p>
                     </div>
+                    <!-- Key clauses section -->
                     <div id="clauses">
                         <h3>Key Clauses</h3>
+                        <!-- Placeholder text, replaced with identified clauses after analysis -->
                         <p class="placeholder">Identified clauses will be listed here.</p>
                     </div>
+                    <!-- Relevant laws section -->
                     <div id="laws">
                         <h3>Relevant Laws</h3>
+                        <!-- Placeholder text, replaced with applicable laws after analysis -->
                         <p class="placeholder">Applicable laws will be shown here.</p>
                     </div>
                 </div>
@@ -67,10 +109,13 @@
         </div>
     </main>
     
+    <!-- Footer section with author credits -->
     <footer>
+        <!-- Credits for the development team -->
         <p>Made with ❤️ by Pruthavirajsingh Rajput, Gayatri Kale, Kaustubh Palod</p>
     </footer>
 
+    <!-- Include external JavaScript file for interactive functionality -->
     <script src="script.js"></script>
 </body>
 </html>

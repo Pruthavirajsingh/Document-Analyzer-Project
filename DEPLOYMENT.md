@@ -29,9 +29,13 @@ Your project is already configured with:
    - Click "Import"
 
 3. **Configure Environment Variables**
-   - In the deployment settings, add:
-   - **Key**: `GEMINI_API_KEY`
+   - During import, Vercel will ask about environment variables
+   - OR after import, go to Project Settings → Environment Variables
+   - Click "Add New"
+   - **Name**: `GEMINI_API_KEY`
    - **Value**: `AIzaSyAFihE_NfBeq4M1-77Fk9hewi7UGdBTYa0`
+   - **Environment**: Select "Production, Preview, and Development"
+   - Click "Save"
 
 4. **Deploy**
    - Click "Deploy"

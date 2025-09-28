@@ -1,18 +1,31 @@
-// Vercel serverless function for document analysis
+api/analyse.js
+// /api/analyze.js
+// Vercel Serverless Function for Legal Document Analysis using Google Gemini AI
+
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import multiparty from 'multiparty';
+import fs from 'fs';
 
-// Helper function to convert file buffer to generative part
+/**
+ * Convert a file buffer to a format suitable for Gemini AI input
+ * @param {Buffer} buffer - File buffer
+ * @param {string} mimeType - File MIME type
+ * @returns {Object} Part object for generative AI
+ */
 function fileToGenerativePart(buffer, mimeType) {
   return {
     inlineData: {
-      data: buffer.toString("base64"),
-      mimeType
+      data: buffer.toString('base64'),
+      mimeType,
     },
   };
 }
 
-// Parse multipart form data
+/**
+ * Parse multipart/form-data requests
+ * @param {Request} req - Incoming request
+ * @returns {Promise<Object>} - Parsed fields and files
+ */
 function parseForm(req) {
   return new Promise((resolve, reject) => {
     const form = new multiparty.Form();
@@ -26,90 +39,82 @@ function parseForm(req) {
     form.on('part', (part) => {
       if (part.filename) {
         const chunks = [];
-        part.on('data', (chunk) => {
-          chunks.push(chunk);
-        });
+        part.on('data', (chunk) => chunks.push(chunk));
         part.on('end', () => {
           files[part.name] = {
             buffer: Buffer.concat(chunks),
             filename: part.filename,
-            mimetype: part.headers['content-type']
+            mimetype: part.headers['content-type'],
           };
         });
       }
     });
 
-    form.on('close', () => {
-      resolve({ fields, files });
-    });
-
-    form.on('error', (err) => {
-      reject(err);
-    });
-
+    form.on('close', () => resolve({ fields, files }));
+    form.on('error', (err) => reject(err));
     form.parse(req);
   });
 }
 
 export default async function handler(req, res) {
   console.log('Function invoked with method:', req.method);
-  console.log('Environment check - API key exists:', !!process.env.GEMINI_API_KEY);
 
-  // Set CORS headers
+  // ---------------------------
+  // CORS Headers
+  // ---------------------------
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET,OPTIONS,PATCH,DELETE,POST,PUT'
+  );
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 
-  // Handle preflight request
+  // Handle preflight requests
   if (req.method === 'OPTIONS') {
-    console.log('Handling OPTIONS request');
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
 
   // Only allow POST requests
   if (req.method !== 'POST') {
-    console.log('Method not allowed:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    console.log('Starting POST request processing');
-    
-    // Check if API key exists
+    // ---------------------------
+    // Check API Key
+    // ---------------------------
     if (!process.env.GEMINI_API_KEY) {
-      console.error('API key not found in environment');
-      throw new Error('GEMINI_API_KEY is not configured');
+      return res.status(500).json({
+        error: 'GEMINI_API_KEY is not configured in environment',
+      });
     }
 
-    console.log('API key found, initializing Gemini AI');
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
     let documentText, documentFile;
 
-    // Parse form data
+    // ---------------------------
+    // Parse request body
+    // ---------------------------
     if (req.headers['content-type']?.includes('multipart/form-data')) {
-      console.log('Parsing multipart form data');
       const { fields, files } = await parseForm(req);
       documentText = fields.documentText;
       documentFile = files.documentFile;
     } else {
-      console.log('Parsing JSON body');
       documentText = req.body?.documentText;
     }
 
-    console.log('Document text provided:', !!documentText);
-    console.log('Document file provided:', !!documentFile);
+    if (!documentText && !documentFile) {
+      return res.status(400).json({ error: 'No input provided' });
+    }
 
-    // Initialize the Gemini AI model
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const promptParts = [];
-
-    // Define the AI instruction prompt
+    // ---------------------------
+    // Prepare AI prompt
+    // ---------------------------
     const instructionText = {
       text: `You are a specialized legal document analyzer. Analyze the provided document meticulously.
 Respond ONLY with a valid JSON object with three keys: "summary", "keyClauses", and "relevantLaws".
@@ -117,56 +122,45 @@ Respond ONLY with a valid JSON object with three keys: "summary", "keyClauses", 
 - "keyClauses": Identify and list the most critical clauses.
 - "relevantLaws": List any applicable laws or legal statutes mentioned or implied.
 
-Do not include any text, markdown, or formatting outside of the JSON object.`
+Do not include any text, markdown, or formatting outside of the JSON object.`,
     };
 
-    // Process file or text input
+    const promptParts = [];
+
     if (documentFile) {
-      console.log('Processing file:', documentFile.filename);
       const filePart = fileToGenerativePart(documentFile.buffer, documentFile.mimetype);
       promptParts.push(filePart, instructionText);
-    } else if (documentText) {
-      console.log('Processing text input, length:', documentText.length);
-      promptParts.push({ text: documentText }, instructionText);
     } else {
-      console.log('No input provided');
-      return res.status(400).json({ error: "No document text or file provided." });
+      promptParts.push({ text: documentText }, instructionText);
     }
 
-    console.log('Sending request to Gemini AI');
-    // Send the prompt to Google Gemini AI for analysis
+    // ---------------------------
+    // Send request to Gemini AI
+    // ---------------------------
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
     const result = await model.generateContent({ contents: [{ parts: promptParts }] });
     const response = await result.response;
-    let rawText = response.text();
-    
-    console.log('Received response from Gemini AI');
-    
-    // Use regex to find JSON object in the AI response
+    const rawText = response.text();
+
+    // Extract JSON object from AI output
     const jsonMatch = rawText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      console.log('Invalid JSON response from AI:', rawText);
-      return res.status(502).json({ 
-        error: "AI response was not valid JSON.",
-        details: rawText 
+      return res.status(502).json({
+        error: 'AI response was not valid JSON',
+        details: rawText,
       });
     }
 
-    const jsonString = jsonMatch[0];
-    const jsonResponse = JSON.parse(jsonString);
-    
-    console.log('Successfully processed request');
+    const jsonResponse = JSON.parse(jsonMatch[0]);
     res.json(jsonResponse);
 
   } catch (error) {
-    console.error("Detailed error during analysis:", {
-      message: error.message,
-      stack: error.stack,
-      name: error.name
-    });
-    res.status(500).json({ 
-      error: "An internal server error occurred.", 
+    console.error('Error during analysis:', error);
+    res.status(500).json({
+      error: 'Internal server error',
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 }

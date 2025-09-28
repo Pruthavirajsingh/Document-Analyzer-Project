@@ -1,4 +1,3 @@
-api/analyse.js
 // /api/analyze.js
 // Vercel Serverless Function for Legal Document Analysis using Google Gemini AI
 

@@ -80,7 +80,7 @@ app.post('/analyze', upload.single('documentFile'), async (req, res) => {
     const documentFile = req.file;
 
     // Initialize the Gemini AI model (using the fast 'flash' variant)
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     // Array to hold the parts of our prompt (text + file data)
     const promptParts = [];
